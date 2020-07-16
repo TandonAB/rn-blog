@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Context as BlogContext } from '../context/BlogContext';
 import { Feather } from '@expo/vector-icons';
+import moment from 'moment';
 
 const IndexScreen = ({ navigation }) => {
   const { state, addBlogPost, deleteBlogPost } = useContext(BlogContext);
@@ -47,12 +48,27 @@ const IndexScreen = ({ navigation }) => {
                 style={{ flex: 1 }}
                 onPress={() => navigation.navigate('ShowBlog', { id: item.id })}
               >
-                <Text style={styles.title}>
-                  {item.title} - {item.id} |{' '}
-                  <Text style={{ fontWeight: '100' }}>
-                    Demo Text is Here Demo Text is Here Demo Text is Here Demo
-                    Text is Here Demo Text is Here
-                  </Text>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: 10,
+                    fontStyle: 'italic',
+                    color: 'lightgray',
+                  }}
+                >
+                  {moment(item.date).format('LLLL')}
+                </Text>
+                <Text
+                  numberOfLines={3}
+                  style={{
+                    marginTop: 4,
+                    fontSize: 14,
+                    fontWeight: '100',
+                    textAlign: 'justify',
+                  }}
+                >
+                  {item.content}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
@@ -74,7 +90,7 @@ const styles = StyleSheet.create({
   },
   postTitle: {
     borderTopWidth: 0.3,
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',

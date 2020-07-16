@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import moment from 'moment';
+import { Context as BlogContext } from '../context/BlogContext';
 
 const CreateScreen = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
+  const { addBlogPost } = useContext(BlogContext);
+
   const date = new Date();
+  // const date = moment(today, 'DD-MM-YYYY');
+  // const date = today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+today.getFullYear();
+  // const date = moment().format('MMMM Do YYYY, h:mm:ss a'); // July 16th 2020, 1:25:33 pm
+  // const date = moment(today).calendar();
 
   return (
     <View style={styles.postView}>
@@ -34,7 +42,10 @@ const CreateScreen = () => {
       </View>
 
       <View style={[styles.formRowView, { marginTop: 8 }]}>
-        <Button title="Add New Post" onPress={() => console.log(date)} />
+        <Button
+          title="Add New Post"
+          onPress={() => addBlogPost(title, content, date)}
+        />
       </View>
     </View>
   );

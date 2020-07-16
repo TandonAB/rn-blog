@@ -1,4 +1,5 @@
 import createDataContext from './createDataContext';
+import moment from 'moment';
 
 const blogReducer = (state, action) => {
   switch (action.type) {
@@ -9,6 +10,7 @@ const blogReducer = (state, action) => {
           id: Math.floor(Math.random() * 99999),
           title: action.payload.title,
           content: action.payload.content,
+          date: moment(),
         },
       ];
     case 'delete_blogpost':
