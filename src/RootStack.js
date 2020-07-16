@@ -4,6 +4,7 @@ import HomeScreen from './screens/HomeScreen';
 import IndexScreen from './screens/IndexScreen';
 import ShowScreen from './screens/ShowScreen';
 import CreateScreen from './screens/CreateScreen';
+import EditPostScreen from './screens/EditPostScreen';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,13 @@ export default function RootStack() {
         component={CreateScreen}
         options={{
           title: 'Create Post',
+        }}
+      />
+      <Stack.Screen
+        name="EditPost"
+        component={EditPostScreen}
+        options={{
+          title: 'Edit Post',
         }}
       />
       <Stack.Screen

@@ -1,13 +1,33 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { Context as BlogContext } from '../context/BlogContext';
 import moment from 'moment';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-const ShowScreen = ({ route }) => {
+const ShowScreen = ({ navigation, route }) => {
   const { state } = useContext(BlogContext);
 
-  const blogPost = state.find((blogPost) => blogPost.id === route.params.id);
+  navigation.setOptions({
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('EditPost', { id: route.params.id })}
+      >
+        <FontAwesome5
+          name="edit"
+          color="white"
+          style={{ fontSize: 24, marginRight: 16 }}
+        />
+      </TouchableOpacity>
+    ),
+  });
 
+  const blogPost = state.find((blogPost) => blogPost.id === route.params.id);
   return (
     <ScrollView>
       <View style={styles.showPostView}>
@@ -35,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   date: {
-    fontSize: 12,
+    fontSize: 10,
     fontStyle: 'italic',
     color: 'gray',
   },

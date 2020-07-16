@@ -4,7 +4,6 @@ import {
   Text,
   View,
   FlatList,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import { Context as BlogContext } from '../context/BlogContext';
@@ -12,7 +11,7 @@ import { Feather } from '@expo/vector-icons';
 import moment from 'moment';
 
 const IndexScreen = ({ navigation }) => {
-  const { state, addBlogPost, deleteBlogPost } = useContext(BlogContext);
+  const { state, deleteBlogPost } = useContext(BlogContext);
 
   navigation.setOptions({
     headerRight: () => (
@@ -30,44 +29,24 @@ const IndexScreen = ({ navigation }) => {
     ),
   });
 
-  return (
+  return state && state.length > 0 ? (
     <View style={{ flex: 1 }}>
-      <Text>Index Screen </Text>
-      <View style={styles.blogButtons}>
-        <Button title="Add Blog" onPress={addBlogPost} color="#090" />
-      </View>
-
       <FlatList
         showsVerticalScrollIndicator={false}
         data={state}
         keyExtractor={(blogPosts) => blogPosts.id.toString()}
         renderItem={({ item }) => {
           return (
-            <View style={styles.postTitle}>
+            <View style={styles.postsList}>
               <TouchableOpacity
                 style={{ flex: 1 }}
                 onPress={() => navigation.navigate('ShowBlog', { id: item.id })}
               >
                 <Text style={styles.title}>{item.title}</Text>
-                <Text
-                  numberOfLines={1}
-                  style={{
-                    fontSize: 10,
-                    fontStyle: 'italic',
-                    color: 'lightgray',
-                  }}
-                >
+                <Text numberOfLines={1} style={styles.date}>
                   {moment(item.date).format('LLLL')}
                 </Text>
-                <Text
-                  numberOfLines={3}
-                  style={{
-                    marginTop: 4,
-                    fontSize: 14,
-                    fontWeight: '100',
-                    textAlign: 'justify',
-                  }}
-                >
+                <Text numberOfLines={3} style={styles.content}>
                   {item.content}
                 </Text>
               </TouchableOpacity>
@@ -79,17 +58,25 @@ const IndexScreen = ({ navigation }) => {
         }}
       />
     </View>
+  ) : (
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+      }}
+    >
+      <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
+        NO POST FOUND.{' '}
+      </Text>
+      <Text style={{ textAlign: 'center' }}> Please add a new Post.</Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  blogButtons: {
-    marginVertical: 10,
-    width: 120,
-    alignSelf: 'center',
-  },
-  postTitle: {
-    borderTopWidth: 0.3,
+  postsList: {
+    borderBottomWidth: 0.3,
     paddingVertical: 8,
     paddingHorizontal: 16,
     flexDirection: 'row',
@@ -99,11 +86,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 24,
   },
+  date: {
+    fontSize: 9,
+    fontStyle: 'italic',
+    color: 'gray',
+  },
+  content: {
+    marginTop: 4,
+    fontSize: 14,
+    fontWeight: '100',
+    textAlign: 'justify',
+  },
   icon: {
     alignSelf: 'flex-start',
     fontSize: 24,
     color: 'tomato',
     paddingLeft: 8,
+    marginTop: 6,
   },
 });
 
