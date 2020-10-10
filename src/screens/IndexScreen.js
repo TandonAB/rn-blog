@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,17 @@ import { Feather } from '@expo/vector-icons';
 import moment from 'moment';
 
 const IndexScreen = ({ navigation }) => {
-  const { state, deleteBlogPost } = useContext(BlogContext);
+  const { state, getBlogPosts, deleteBlogPost } = useContext(BlogContext);
+
+  useEffect(() => {
+    getBlogPosts();
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      getBlogPosts();
+    });
+
+    return unsubscribe;
+  }, []);
 
   navigation.setOptions({
     headerRight: () => (
@@ -34,7 +44,7 @@ const IndexScreen = ({ navigation }) => {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={state}
-        keyExtractor={(blogPosts) => blogPosts.id.toString()}
+        keyExtractor={(blogPost) => blogPost.id.toString()}
         renderItem={({ item }) => {
           return (
             <View style={styles.postsList}>
